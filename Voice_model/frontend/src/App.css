@@ -1,0 +1,589 @@
+/* =========================================================
+   VOICEGUARD SOC
+   ========================================================= */
+
+:root {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #e8edf5;
+  background: #05070a;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(0, 255, 190, 0.035),
+      transparent 28%
+    ),
+    #05070a;
+}
+
+button {
+  font: inherit;
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app {
+  min-height: 100vh;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.01),
+      transparent 30%
+    );
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+  height: 96px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 48px;
+
+  border-bottom: 1px solid #171d25;
+
+  background: rgba(4, 7, 10, 0.94);
+}
+
+.brand {
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #eef2f8;
+}
+
+.brand span {
+  color: #00e6a8;
+}
+
+.subtitle {
+  margin-top: 6px;
+
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+
+  color: #718095;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 13px;
+  letter-spacing: 1.5px;
+
+  color: #8190a3;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #566170;
+
+  box-shadow: 0 0 0 transparent;
+}
+
+.status-dot.online {
+  background: #00e6a8;
+
+  box-shadow:
+    0 0 10px rgba(0, 230, 168, 0.7);
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.dashboard {
+  width: min(1460px, calc(100% - 80px));
+
+  margin: 34px auto 70px;
+}
+
+/* =========================================================
+   TOP GRID
+   ========================================================= */
+
+.grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.card,
+.detection-card,
+.control-card,
+.history-card {
+  border: 1px solid #202832;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(16, 21, 28, 0.96),
+      rgba(9, 13, 18, 0.96)
+    );
+
+  border-radius: 8px;
+}
+
+.card {
+  min-height: 134px;
+
+  padding: 25px;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 2px;
+
+  color: #6e7e92;
+}
+
+.big-value {
+  margin-top: 14px;
+
+  font-size: 26px;
+  font-weight: 700;
+
+  color: #e7edf5;
+}
+
+.small {
+  margin-top: 7px;
+
+  font-size: 13px;
+
+  color: #667487;
+}
+
+/* =========================================================
+   DETECTION CARD
+   ========================================================= */
+
+.detection-card {
+  margin-top: 18px;
+
+  min-height: 370px;
+
+  padding: 38px 42px;
+
+  text-align: center;
+}
+
+.detection-status {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 14px;
+
+  padding: 9px 20px;
+
+  border: 1px solid rgba(0, 230, 168, 0.3);
+
+  border-radius: 5px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  color: #00e6a8;
+
+  background: rgba(0, 230, 168, 0.06);
+}
+
+.detection-status.danger {
+  color: #ff5263;
+
+  border-color: rgba(255, 82, 99, 0.35);
+
+  background: rgba(255, 82, 99, 0.07);
+}
+
+.detection-status.safe {
+  color: #00e6a8;
+}
+
+/* =========================================================
+   SCORE
+   ========================================================= */
+
+.score-container {
+  margin-top: 38px;
+}
+
+.score {
+  font-size: clamp(64px, 7vw, 88px);
+
+  line-height: 1;
+
+  font-weight: 750;
+
+  letter-spacing: -4px;
+
+  color: #edf2f9;
+}
+
+.score span {
+  margin-left: 4px;
+
+  font-size: 32px;
+
+  color: #687688;
+
+  letter-spacing: 0;
+}
+
+.score-label {
+  margin-top: 13px;
+
+  font-size: 12px;
+
+  letter-spacing: 2.5px;
+
+  color: #708096;
+}
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.progress {
+  width: 58%;
+
+  height: 9px;
+
+  margin: 30px auto 0;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background: #171e26;
+}
+
+.progress-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #00e6a8;
+
+  transition:
+    width 0.45s ease,
+    background 0.3s ease;
+}
+
+.progress-fill.danger-fill {
+  background: #ff5263;
+  box-shadow: 0 0 12px rgba(255, 82, 99, 0.25);
+}
+
+/* =========================================================
+   SCORE ROW
+   ========================================================= */
+
+.score-row {
+  width: 58%;
+
+  margin: 17px auto 0;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  text-align: left;
+}
+
+.score-row > div:last-child {
+  text-align: right;
+}
+
+.score-row span {
+  display: block;
+
+  font-size: 11px;
+
+  letter-spacing: 1.5px;
+
+  color: #647286;
+}
+
+.score-row strong {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 15px;
+
+  color: #dce3ec;
+}
+
+/* =========================================================
+   CONTROL
+   ========================================================= */
+
+.control-card {
+  min-height: 96px;
+
+  margin-top: 18px;
+
+  padding: 22px 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.call-id {
+  margin-top: 8px;
+
+  font-size: 13px;
+
+  color: #68788d;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.connect-button,
+.disconnect-button {
+  border: none;
+
+  padding: 13px 25px;
+
+  border-radius: 5px;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.connect-button {
+  color: #03130e;
+
+  background: #00e6a8;
+
+  box-shadow:
+    0 0 18px rgba(0, 230, 168, 0.12);
+}
+
+.connect-button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 0 25px rgba(0, 230, 168, 0.22);
+}
+
+.disconnect-button {
+  color: #ff6978;
+
+  background: rgba(255, 82, 99, 0.08);
+
+  border: 1px solid rgba(255, 82, 99, 0.35);
+}
+
+.disconnect-button:hover {
+  opacity: 0.8;
+}
+
+/* =========================================================
+   HISTORY
+   ========================================================= */
+
+.history-card {
+  margin-top: 18px;
+
+  min-height: 170px;
+
+  padding: 26px 25px;
+}
+
+.empty {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100px;
+
+  color: #58677a;
+
+  font-size: 14px;
+}
+
+.history-list {
+  margin-top: 20px;
+
+  border-top: 1px solid #1b222c;
+}
+
+.history-row {
+  min-height: 52px;
+
+  display: grid;
+
+  grid-template-columns:
+    100px
+    140px
+    1fr
+    100px;
+
+  align-items: center;
+
+  gap: 15px;
+
+  border-bottom: 1px solid #171e27;
+
+  font-size: 13px;
+
+  color: #7b899b;
+}
+
+.history-row strong {
+  color: #dce4ee;
+}
+
+.safe-text {
+  color: #00e6a8;
+}
+
+.danger-text {
+  color: #ff5263;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .header {
+    padding: 0 25px;
+  }
+
+  .dashboard {
+    width: min(94%, 900px);
+  }
+
+  .grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .progress,
+  .score-row {
+    width: 80%;
+  }
+}
+
+@media (max-width: 650px) {
+
+  .header {
+    height: auto;
+
+    padding: 22px 20px;
+
+    gap: 20px;
+
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .system-status {
+    align-self: flex-end;
+  }
+
+  .dashboard {
+    width: calc(100% - 28px);
+
+    margin-top: 18px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detection-card {
+    padding: 30px 18px;
+  }
+
+  .progress,
+  .score-row {
+    width: 94%;
+  }
+
+  .control-card {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 20px;
+  }
+
+  .connect-button,
+  .disconnect-button {
+    width: 100%;
+  }
+
+  .history-row {
+    grid-template-columns:
+      60px
+      90px
+      1fr
+      70px;
+
+    font-size: 11px;
+  }
+}

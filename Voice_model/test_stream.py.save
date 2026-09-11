@@ -1,0 +1,174 @@
+import asyncio
+import websockets
+import json
+import base6
+import numpy as np
+import soundfile as sf
+
+
+WS_URL = "ws://127.0.0.1:8000/stream"
+
+AUDIO_FILE = "test_audio/asvspoof/known_real.flac"
+
+
+async def main():
+
+    print("==========================================")
+    print(" AASIST WebSocket STREAM TEST")
+    print("==========================================")
+
+    # --------------------------------------------------
+    # Load test audio
+    # --------------------------------------------------
+
+    print(f"\nLoading: {AUDIO_FILE}")
+
+    audio, sr = sf.read(AUDIO_FILE)
+
+    print(f"Sample rate: {sr}")
+    print(f"Samples: {len(audio)}")
+
+    # Stereo → mono
+    if audio.ndim > 1:
+        audio = np.mean(audio, axis=1)
+
+    # AASIST pipeline expects 16 kHz
+    if sr != 16000:
+
+        raise ValueError(
+            f"Expected 16000 Hz audio, got {sr}"
+        )
+
+    # Convert float [-1,1] → int16
+    pcm16 = (
+        audio * 32767
+    ).astype(np.int16)
+
+    # --------------------------------------------------
+    # Convert 16 kHz PCM → 8 kHz PCM
+    # --------------------------------------------------
+
+    pcm8, _ = audioop.ratecv(
+        pcm16.tobytes(),
+        2,
+        1,
+        16000,
+        8000,
+        None
+    )
+
+    # --------------------------------------------------
+    # Convert PCM → μ-law
+    # --------------------------------------------------
+
+    ulaw = audioop.lin2ulaw(
+        pcm8,
+        2
+    )
+
+    # --------------------------------------------------
+    # Connect WebSocket
+    # --------------------------------------------------
+
+    print(
+        f"\nConnecting to {WS_URL}"
+    )
+
+    async with websockets.connect(
+        WS_URL
+    ) as websocket:
+
+        print("✅ WebSocket connected")
+
+        # --------------------------------------------------
+        # Send START event
+        # --------------------------------------------------
+
+        await websocket.send(
+            json.dumps({
+                "event": "start",
+                "start": {
+                    "callSid": "TEST_CALL_001"
+                }
+            })
+        )
+
+        response = await websocket.recv()
+
+        print(
+            f"\nServer: {response}"
+        )
+
+        # --------------------------------------------------
+        # Send audio in small chunks
+        # --------------------------------------------------
+
+        chunk_size = 160  # 20 ms at 8 kHz
+
+        print(
+            "\n🎙️ Streaming audio..."
+        )
+
+        for i in range(
+            0,
+            len(ulaw),
+            chunk_size
+        ):
+
+            chunk = ulaw[
+                i:i + chunk_size
+            ]
+
+            payload = base64.b64encode(
+                chunk
+            ).decode("utf-8")
+
+            message = {
+                "event": "media",
+                "media": {
+                    "payload": payload
+                }
+            }
+
+            await websocket.send(
+                json.dumps(message)
+            )
+
+            # Simulate real-time 20 ms audio
+            await asyncio.sleep(0.020)
+
+            # Check whether server sent a result
+            try:
+
+                response = await asyncio.wait_for(
+                    websocket.recv(),
+                    timeout=0.001
+                )
+
+                print(
+                    f"🔎 Server: {response}"
+                )
+
+            except asyncio.TimeoutError:
+
+                pass
+
+        # --------------------------------------------------
+        # Send STOP
+        # --------------------------------------------------
+
+        await websocket.send(
+            json.dumps({
+                "event": "stop"
+            })
+        )
+
+        print(
+            "\n🛑 Stream finished"
+        )
+
+
+if __name__ == "__main__":
+
+    asyncio.run(main())
+    
